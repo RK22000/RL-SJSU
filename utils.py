@@ -12,7 +12,7 @@ class Agent(ABC):
     def act(self, observation, periphral=None):
         pass
     @abstractmethod
-    def think(self, observation_old, action, reward, observation, terminated):
+    def record_observation(self, observation_old, action, reward, observation, terminated):
         pass
 
 def run_upto_n_steps(env, agent: Agent, n, continuation=None, runs=[[]]):
@@ -33,7 +33,7 @@ def run_upto_n_steps(env, agent: Agent, n, continuation=None, runs=[[]]):
         action = agent.act(observation)
         observation_old = observation
         observation, reward, terminated, truncated, info = env.step(action)
-        agent.think(observation_old, action, reward, observation, terminated)
+        agent.record_observation(observation_old, action, reward, observation, terminated)
         runs[-1].append(reward)
         step += 1
     if terminated or truncated:
@@ -43,17 +43,25 @@ def run_upto_n_steps(env, agent: Agent, n, continuation=None, runs=[[]]):
 
 def plot_reward_and_episodes(runs):
     # plt.clf()
-    plt.scatter(*zip(*enumerate([sum(i) for i in runs])), s=10, c='tab:blue', label='total reward')
-    plt.axhline(0, linestyle=':', color='tab:blue')
+    plt.scatter(*zip(*enumerate([sum(i) for i in runs])), s=120, c=[len(i) for i in runs], label='total reward')
+    plt.axhline(0,color='k')
+    plt.axhline(200,color='k')
     plt.ylabel("Total episode reward")
+    plt.colorbar(label='episode length')
     plt.legend()
-    plt.twinx()
-    plt.scatter(*zip(*enumerate([len(i) for i in runs])), s=10, c='tab:orange', label='episode length')
-    plt.axhline(0, linestyle=':', color='tab:orange')
-    plt.ylabel("Episode lenght")
-    plt.legend()
-    plt.pause(0.1)
 
+def plot_one_run(env, agent: Agent, plot_interval=10):
+    cont=None
+    runs=[[]]
+    while len(runs)==1:
+        plt.clf()
+        plt.plot(runs[-1])
+        plt.pause(0.1)
+        cont, runs = run_upto_n_steps(env, agent, plot_interval, cont, runs)
+    plt.clf()
+    plt.plot(runs[-2])
+    plt.pause(0.5)
+    
 
 def run_and_plot(env, agent: Agent, n, cont=None, ):
     """
@@ -97,7 +105,7 @@ class TrainableNetworkAgent(Agent):
         with torch.no_grad():
             action = self.network(obs)
         return action.argmax().item()
-    def think(self, observation, action, reward, observation_next, terminated):
+    def record_observation(self, observation, action, reward, observation_next, terminated):
         if not self.network.training:
             return 
         self.thoughts += 1
