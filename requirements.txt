@@ -4,3 +4,5 @@ notebook
 pandas
 seaborn
 tqdm
+flax 
+treescope
