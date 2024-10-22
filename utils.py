@@ -50,7 +50,7 @@ def plot_reward_and_episodes(runs):
     plt.colorbar(label='episode length')
     plt.legend()
 
-def plot_one_run(env, agent: Agent, plot_interval=10):
+def plot_one_run(env, agent: Agent, plot_interval=10, pause=0.1):
     cont=None
     runs=[[]]
     while len(runs)==1:
@@ -60,7 +60,7 @@ def plot_one_run(env, agent: Agent, plot_interval=10):
         cont, runs = run_upto_n_steps(env, agent, plot_interval, cont, runs)
     plt.clf()
     plt.plot(runs[-2])
-    plt.pause(0.5)
+    plt.pause(pause)
     
 
 def run_and_plot(env, agent: Agent, n, cont=None, ):
