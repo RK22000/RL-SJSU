@@ -55,11 +55,11 @@ def plot_one_run(env, agent: Agent, plot_interval=10, pause=0.1):
     runs=[[]]
     while len(runs)==1:
         plt.clf()
-        plt.plot(runs[-1])
+        plt.plot(np.cumsum(runs[-1]))
         plt.pause(0.1)
         cont, runs = run_upto_n_steps(env, agent, plot_interval, cont, runs)
     plt.clf()
-    plt.plot(runs[-2])
+    plt.plot(np.cumsum(runs[-2]))
     plt.pause(pause)
     
 
