@@ -1,4 +1,5 @@
 torch==2.4.1
+gymnasium==0.29.1
 gymnasium[box2d]
 notebook
 pandas
@@ -6,3 +7,6 @@ seaborn
 tqdm
 flax 
 treescope
+stable-baselines3
+rl_zoo3
+shimmy>=0.2.1
