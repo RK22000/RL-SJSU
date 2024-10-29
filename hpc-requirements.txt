@@ -1,0 +1,15 @@
+-i https://download.pytorch.org/whl/cu121
+torch
+-i https://pypi.org/simple
+gymnasium==0.29.1
+notebook
+pandas
+seaborn
+ipympl
+tqdm
+jax[cuda12]
+flax 
+treescope
+stable-baselines3
+rl_zoo3
+shimmy>=0.2.1
