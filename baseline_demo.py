@@ -1,6 +1,17 @@
 import gymnasium as gym
+import argparse
+from stable_baselines3 import DQN, PPO
 
-from stable_baselines3 import DQN
+parser = argparse.ArgumentParser("BaselineDemo")
+parser.add_argument("--algo", default='dqn', help="dqn or ppo", type=lambda i: str(i).lower() )
+
+args = parser.parse_args()
+
+if args.algo=='dqn':
+  model = DQN.load("baseline_models/dqn-lunarlander/LunarLander-v2.zip")
+elif args.algo=='ppo':
+  model = PPO.load("baseline_models/ppo-lunarlander/LunarLander-v2.zip")
+  
 
 # env = gym.make("LunarLander-v2")
 
@@ -10,7 +21,6 @@ from stable_baselines3 import DQN
 
 # del model # remove to demonstrate saving and loading
 
-model = DQN.load("rl-baselines3-zoo/rl-trained-agents/dqn/LunarLander-v2_1/LunarLander-v2_")
 # model = DQN.load("dqn_cartpole")
 
 env = gym.make("LunarLander-v2", render_mode='human')
