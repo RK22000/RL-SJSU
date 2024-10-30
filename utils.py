@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
 import logging
+import numpy as np
 
 env_logger = logging.getLogger("environmnet_logger")
 
@@ -50,14 +51,16 @@ def plot_reward_and_episodes(runs):
     plt.colorbar(label='episode length')
     plt.legend()
 
-def plot_one_run(env, agent: Agent, plot_interval=10, pause=0.1):
+def plot_one_run(env, agent: Agent, plot_interval=10, pause=0.1, clear_func=lambda:None):
     cont=None
     runs=[[]]
     while len(runs)==1:
+        clear_func()
         plt.clf()
         plt.plot(np.cumsum(runs[-1]))
         plt.pause(0.1)
         cont, runs = run_upto_n_steps(env, agent, plot_interval, cont, runs)
+    clear_func()
     plt.clf()
     plt.plot(np.cumsum(runs[-2]))
     plt.pause(pause)
